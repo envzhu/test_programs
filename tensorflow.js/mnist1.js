@@ -1,3 +1,6 @@
+const X_SIZE = 28;
+const Y_SIZE = 28;
+
 const STEP_NUM = 150;
 const BATCH_SIZE = 8;
 const EPOCHS = 1;
@@ -19,11 +22,12 @@ function load_data_1(f){
       img.onload = async function(){
         var canvas = document.createElement('canvas');
         var context = canvas.getContext('2d');
-        canvas.width = this.width;
-        canvas.height = this.height;
-        context.drawImage(this, 0, 0);
-  
-        let img_data = context.getImageData(0, 0, this.width, this.height);
+        
+        canvas.width = X_SIZE;
+        canvas.height = Y_SIZE;
+        context.drawImage(this, 0, 0, this.width, this.height, 0, 0, X_SIZE, Y_SIZE);
+        
+        let img_data = context.getImageData(0, 0, X_SIZE, Y_SIZE);
   
         let data = new Array(img_data.width * img_data.height);
   
@@ -111,7 +115,7 @@ async function mnist1_main(){
     console.log("========== Initial Model");
 
     const model = tf.sequential({
-      layers: [tf.layers.dense({units: 2, inputShape: [28*28]})]
+      layers: [tf.layers.dense({units: 2, inputShape: [X_SIZE*Y_SIZE]})]
     });
     model.compile({optimizer: 'sgd', loss: 'meanSquaredError'});
 
